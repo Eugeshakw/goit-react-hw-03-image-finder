@@ -9,6 +9,7 @@ const ImageGallery = ({ photos, onClick }) => {
         <ImageGalleryItem
           key={photo.id}
           src={photo.webformatURL}
+          largeImageURL={photo.largeImageURL}
           alt={photo.tags}
           onClick={onClick}
         />
@@ -16,28 +17,17 @@ const ImageGallery = ({ photos, onClick }) => {
     </ul>
   );
 };
+
 ImageGallery.propTypes = {
-    photos: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        webformatURL: PropTypes.string.isRequired,
-        tags: PropTypes.string.isRequired,
-        largeImageURL: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-    onClick: PropTypes.func.isRequired,
-  };
+  photos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  onClick: PropTypes.func.isRequired,
+};
 
 export default ImageGallery;
-// export default class ImageGallery extends React.Component {
-
-//     render(){
-//         return(
-//             <ul class="gallery">
-//                 <ImageGalleryItem
-
-//                 />
-//             </ul>
-//         )
-//     }
-// }
