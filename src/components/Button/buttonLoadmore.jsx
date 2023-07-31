@@ -1,5 +1,6 @@
 import React from "react";
 import style from './loadmore.module.scss'
+import PropTypes from 'prop-types';
 const Button = ({onClick}) => {
     return (
         <div>
@@ -13,3 +14,8 @@ const Button = ({onClick}) => {
     )
 }
 export default Button;
+
+Button.propTypes = {
+    onClick: PropTypes.func.isRequired,
+    
+  }; 

@@ -5,7 +5,8 @@ import Button from './components/Button/buttonLoadmore';
 import Modal from './components/Modal/modalImg';
 import { getPhotosByQuery } from './api/api.js';
 import { ProgressBar } from 'react-loader-spinner';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export class App extends React.Component {
   state = {
     images: [],
@@ -24,8 +25,8 @@ export class App extends React.Component {
   };
 
   handleFormSubmit = searchquery => {
-    if(this.state.searchquery === searchquery){
-      return alert(`вы уже просматриваете ${searchquery}`)
+    if (this.state.searchquery === searchquery) {
+      return toast.warn(`вы уже просматриваете ${searchquery}`);
     }
 
     this.setState({
@@ -34,33 +35,41 @@ export class App extends React.Component {
       images: [],
       isloading: true,
     });
-    console.log(this.state.page);
-  };
- 
-  fetchImages = async () => {
-    const { searchquery, page } = this.state;
-    const photos = await getPhotosByQuery(searchquery, page);
-   
-    this.setState(prevState => ({
-      images: [...prevState.images, ...photos.hits],
-      page: prevState.page + 1,
-      isloading: false,
-    }));
     
+  };
+
+  fetchImages = async () => {
+    try {
+
+      
+      
+
+      const { searchquery, page } = this.state;
+      const photos = await getPhotosByQuery(searchquery, page);
+      
+      this.setState(prevState => ({
+        images: [...prevState.images, ...photos.hits],
+        page: prevState.page + 1,
+        isloading: false,
+      }));
+      
+      if (photos.hits.length > 0 && this.state.page === 1) {
+        toast.success('you are our images');
+        
+        
+      } else if(photos.hits.length === 0){
+        throw new Error();
+      }
+    } catch (err) {
+      
+      toast.error('No IMAGES found');
+      
+    }
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchquery !== this.state.searchquery) {
-      try{
-        this.fetchImages();
-        console.log('try');
-        
-       
-       
-      } catch(err){
-       console.log('error')
-        
-      }
+      this.fetchImages();
       
     }
   }
@@ -79,6 +88,18 @@ export class App extends React.Component {
     return (
       <>
         <Searchbar onSubmit={this.handleFormSubmit} />
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         {this.state.isloading && (
           <ProgressBar
             height="80"
