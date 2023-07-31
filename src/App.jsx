@@ -24,29 +24,44 @@ export class App extends React.Component {
   };
 
   handleFormSubmit = searchquery => {
+    if(this.state.searchquery === searchquery){
+      return alert(`вы уже просматриваете ${searchquery}`)
+    }
+
     this.setState({
-      searchquery: searchquery,
+      searchquery: searchquery.toLowerCase(),
       page: 1,
       images: [],
       isloading: true,
     });
     console.log(this.state.page);
   };
-
+ 
   fetchImages = async () => {
     const { searchquery, page } = this.state;
     const photos = await getPhotosByQuery(searchquery, page);
-
+   
     this.setState(prevState => ({
       images: [...prevState.images, ...photos.hits],
       page: prevState.page + 1,
       isloading: false,
     }));
+    
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchquery !== this.state.searchquery) {
-      this.fetchImages();
+      try{
+        this.fetchImages();
+        console.log('try');
+        
+       
+       
+      } catch(err){
+       console.log('error')
+        
+      }
+      
     }
   }
 
